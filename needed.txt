@@ -1,0 +1,8 @@
+    Not a pip requrirements file!!!
+
+    python packages needed
+soundfile
+numpy
+
+    also you need
+ffmpeg
