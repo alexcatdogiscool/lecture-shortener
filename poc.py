@@ -27,7 +27,8 @@ print(f"Starting processing of video {FILENAME}\n")
 
 ### ask for cutoff volume ##
 print("getting cutoff volume")
-os.system(f"ffmpeg -i {FILENAME} -loglevel quiet -y full_audio.wav")
+os.system(f"ffmpeg -i {FILENAME} -y full_audio.wav")
+print(os.system("ls -laR"))
 data, s = sf.read("full_audio.wav")
 rms = np.sqrt(np.mean(data**2))
 print(f"the rms of the audio is: {rms}")
@@ -92,7 +93,7 @@ af.close()
 os.system(f"ffmpeg -f concat -safe 0 -i fconcat.txt -vsync vfr -pix_fmt yuv420p -loglevel quiet -y foutput.mp4")
 os.system(f"ffmpeg -f concat -safe 0 -i aconcat.txt -c copy -loglevel quiet -y aoutput.wav")
 
-os.system(f"ffmpeg -i foutput.mp4 -i aoutput.wav -loglevel quiet -map 0:v:0 -map 1:a:0 -c:v copy -c:a copy -y {FILENAME.split(".")[0]}_shortened.mp4")
+os.system(f"ffmpeg -i foutput.mp4 -i aoutput.wav -loglevel quiet -map 0:v:0 -map 1:a:0 -c:v copy -c:a copy -y {FILENAME.split('.')[0]}_shortened.mp4")
 
 ### cleaning up ###
 
