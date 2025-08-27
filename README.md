@@ -1,11 +1,23 @@
+# Dockerized version!!
+ported to docker!
+## Usage
+to build the image run
+```
+docker build -t your_image_name .
+```
+then, with your working directory being the one containg the Dockerfile, put the video you want shortened inside a subfolder named video.
+then to run the program run:
+```
+docker run -v $(pwd)/video:/wrk/input your_image_name
+```
+or replace $(pwd) with whatever the directory is.
+
 # lecture-shortener
 
 this program is intended to be used to cut out dead air in lectures so the time can be reduced and you can watch them faster.
 it will work with any video though.
 
-# Usage
-in the directory, run "python poc.py desired_fps(number) auto_cutoff(boolean) path_to_video"
-
+# Usage (again)
 the desired fps value sets the output FPS. if the video is just a lecturer reading slides you can set this to something low like 5 or so.
 lower frame rates will process videos faster.
 

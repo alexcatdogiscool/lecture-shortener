@@ -27,8 +27,7 @@ print(f"Starting processing of video {FILENAME}\n")
 
 ### ask for cutoff volume ##
 print("getting cutoff volume")
-os.system(f"ffmpeg -i {FILENAME} -y full_audio.wav")
-print(os.system("ls -laR"))
+os.system(f"ffmpeg -i {FILENAME} -loglevel quiet -y full_audio.wav")
 data, s = sf.read("full_audio.wav")
 rms = np.sqrt(np.mean(data**2))
 print(f"the rms of the audio is: {rms}")
@@ -43,7 +42,6 @@ else:
 print("reducing the framerate")
 os.system(f"ffmpeg -i {FILENAME} -r {FPS} -ac 1 -loglevel quiet -y frame_adjusted.mp4")
 
-
 ### save individual frame images and audio clip pairs into files ###
 
 #delete contents of frame directory
@@ -57,7 +55,6 @@ if os.path.exists(frame_dir):
 
 os.system(f"ffmpeg -y -i frame_adjusted.mp4 -loglevel quiet -qscale:v 2 {frame_dir}/frame_%05d.png")#get all frame pngs
 os.system(f"ffmpeg -y -i frame_adjusted.mp4 -loglevel quiet -ac 1 full_audio.wav")#get the audio
-
 
 print("measuring volume")
 
@@ -93,9 +90,10 @@ af.close()
 os.system(f"ffmpeg -f concat -safe 0 -i fconcat.txt -vsync vfr -pix_fmt yuv420p -loglevel quiet -y foutput.mp4")
 os.system(f"ffmpeg -f concat -safe 0 -i aconcat.txt -c copy -loglevel quiet -y aoutput.wav")
 
-os.system(f"ffmpeg -i foutput.mp4 -i aoutput.wav -loglevel quiet -map 0:v:0 -map 1:a:0 -c:v copy -c:a copy -y {FILENAME.split('.')[0]}_shortened.mp4")
+os.system(f"ffmpeg -i foutput.mp4 -i aoutput.wav -loglevel quiet -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k -y {FILENAME.split('.')[0]}_shortened.mp4")
 
 ### cleaning up ###
+
 
 print("cleaning up")
 os.remove("foutput.mp4")
